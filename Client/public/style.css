@@ -43,6 +43,11 @@ header ul{
     font-weight: 600;
 }
 
+header ul a{
+    color: #FFF;
+    text-decoration: none;
+}
+
 
 li{
     cursor: pointer;
