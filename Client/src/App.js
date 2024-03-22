@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React from "react";
+import {BrowserRouter , Link} from 'react-router-dom';
 
-function Article({ imageToUrl, title, author, description, publishedAt, link }) {
+
+function Article({imageToUrl , title , author , description , publishedAt , link}){
+
+    // console.log(imageToUrl ,"\n", title , "\n" , author , "\n" , description , "\n", publishedAt)
+
     return (
         <div className="article">
-            <img src={imageToUrl} alt="Not Found" />
+            <img src={imageToUrl} alt="Image Not Found" />
             <div className="title">
                 <h3>{title}</h3>
             </div>
@@ -13,101 +17,142 @@ function Article({ imageToUrl, title, author, description, publishedAt, link }) 
             <p><i>Published Date</i>: {publishedAt}</p>
             <a href={link}>More Info</a>
         </div>
-    );
+    )
 }
 
-function NewsList({ articles }) {
-    return (
-        <section>
-            {articles.map((article, i) => (
-                <Article
-                    key={i}
-                    imageToUrl={article.urlToImage}
-                    title={article.title}
-                    author={article.author}
-                    description={article.description}
-                    publishedAt={article.publishedAt}
-                    link={article.url}
-                />
-            ))}
-        </section>
-    );
-}
+function App(){
 
-function App() {
-    const [articlesData, setArticlesData] = useState([]);
-    const [query, setQuery] = useState("cybersecurity");
-    const [hideSearch, setHideSearch] = useState(true);
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const date = new Date();
-                const response = await fetch(`https://newsapi.org/v2/everything?q=${query}&from=${date.getFullYear()}-${date.getMonth()}-${date.getDate()}&sortBy=publishedAt&apiKey=85af9400c56446819326f5fdfc6afc0e`);
-                const data = await response.json();
-                if (data.status === 'error' || data.totalResults === 0) {
-                    throw new Error(data.message);
-                }
-                setArticlesData(data.articles);
-            } catch (error) {
-                console.error("Error fetching data:", error);
+    const [articlesData , setArticleData] = React.useState({status: false , data: false});
+    const [query , setQuery] = React.useState("cybersecurity");
+    const [loginStatus , setLoginStatus] = React.useState(false);
+
+
+    function LoginForm(){
+        const [userName, setuserName] = React.useState('');
+        const [password, setPassword] = React.useState('');
+    
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            console.log('userName:', userName);
+            console.log('Password:', password);
+            setuserName('');
+            setPassword('');
+            if (userName === "Admin" && password === "Root") {
+                setLoginStatus(true); 
             }
-        }
-        fetchData();
-    }, [query]);
+            else{
+                alert("Invalid Details")
+            }
+        };
+        
+    
+        return (
+            <div className="login-container">
+                <h1 className="login-title">Login to access the new app</h1>
+                <small>This is a sample login form Enter=&gt; <b>Admin</b>: <b>Root</b></small>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="userName" className="form-label">UserName:</label>
+                        <input
+                            type="userName"
+                            id="userName"
+                            value={userName}
+                            onChange={(e) => setuserName(e.target.value)}
+                            required
+                            className="form-input"
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password" className="form-label">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="form-input"
+                        />
+                    </div>
+                    <BrowserRouter>
+                        <Link to="/login"><button className="submit-button" onClick={handleSubmit}>Login</button></Link>
+                        
+                    </BrowserRouter>
+                </form>
+    
+            </div>
+        );
+    };
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        const value = document.getElementById('inputBox').value;
-        setQuery(value);
-    }
+    React.useEffect(()=>{
+        setArticleData({status: false , data: false})
+            async function getData(){
+                try{
+                    let response = await fetch(`https://newsapi.org/v2/everything?q=${query}&from=${new Date().getFullYear}-${new Date().getMonth()}-${new Date().getDate()}&sortBy=publishedAt&apiKey=47b293b38f9d48f0949912210da79925`);
+                    let data = await response.json();
+                    // console.log(data.articles)
+                    if(data.status === 'error' || data.totalResults === 0){
+                        throw new Error("Unable to Fetch Data");
+                    }
+                    setArticleData({status: true , data:data})                    
+                }catch(error){
+                    setArticleData({status: true , data: false})
+                    console.log("Error Generated: "+error);
+                }
+            }
+            getData();
+        } , [query]);
+
+        function handleSubmit(event){
+            event.preventDefault();
+            // console.log(event)
+            let value = document.getElementById('inputBox').value;
+            // console.log(value)
+            setQuery(value)
+        }
+
+
 
     return (
-        <Router>
+        <>
             <header>
-                <h2>News App Using React</h2>
+                <h2> News App Using React</h2>
                 <ul>
-                    <li><Link to="/" onClick={() => { setQuery("cricket"); setHideSearch(true); }}>Cricket</Link></li>
-                    <li><Link to="/" onClick={() => { setQuery("politics"); setHideSearch(true); }}>Politics</Link></li>
-                    <li><Link to="/" onClick={() => { setQuery("latest"); setHideSearch(true); }}>Latest</Link></li>
-                    <li><Link to="/postNews" onClick={() => setHideSearch(false)}>Post News</Link></li>
+                    <li onClick={()=>setQuery("cricket")}>Cricket</li>
+                    <li onClick={()=>setQuery('politics')}>Politics</li>
+                    <li onClick={()=>setQuery('latest')}>Latest</li>
                 </ul>
             </header>
 
-            {hideSearch && (
-                <form onSubmit={handleSubmit}>
-                    <input type="text" placeholder="Enter keyword eg. India" id="inputBox" />
-                    <button type="submit">Search</button>
-                </form>
-            )}
+            <form action="#" onSubmit={handleSubmit} className="search-form">
+                    <input type="text" placeholder={"Enter keyword eg.India"} id="inputBox"/>
+                    <button onClick={handleSubmit} className="search-form-button">Search</button>
+            </form>
 
-            <Routes>
-                <Route path="/" element={<NewsList articles={articlesData} />} />
-                <Route path="/postNews" element={<PostNews />} />
-            </Routes>
-        </Router>
-    );
+
+            {!loginStatus ? <LoginForm setLoginStatus={setLoginStatus} />: <section>
+            {articlesData.status ? articlesData.data ? 
+                articlesData.data.articles.map((article , i)=> {
+                    if(article.urlToImage !== null )
+                    return (
+                        <Article imageToUrl = {article.urlToImage} title = {article.title} key={i} author = {article.author} description= {article.description} publishedAt = {article.publishedAt} link={article.url}/>
+                    )
+                    
+                }
+                )
+                : "Unabel To Fetch Data" : <div className="loader"></div>}
+        </section>}
+
+             
+        </>
+    )
 }
 
-function PostNews() {
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await fetch("http://localhost:3001/postNews");
-                const data = await response.json();
-                console.log(data);
-            } catch (error) {
-                console.error("Error fetching post news data:", error);
-            }
-        }
-        fetchData();
-    }, []);
 
-    return (
-        <section>
-            <h2>Post News</h2>
-        </section>
-    );
-}
+
+
+
+
+
 
 export default App;
