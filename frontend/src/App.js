@@ -6,6 +6,7 @@ var API_1 = "85af9400c56446819326f5fdfc6afc0e";
 var API_2 = "1fabb175ac6f4d81aec50289cd58e946";
 var API_3 = "47b293b38f9d48f0949912210da79925";
 var API_4 = "08fe3addd41641368dc353b02a66dbb4";
+var API_5 = "3e0b69c51d9d44dc8ab359124b64b968";
 
 function App(){
 
@@ -22,14 +23,14 @@ function App(){
         async function getData() {
             try {
                 // Fetching data from News API with provided query and API key
-                // let response = await fetch(
-                //     `https://newsapi.org/v2/everything?
-                //     q=${query}&from=
-                //     ${new Date().getFullYear()}-
-                //     ${new Date().getMonth() + 1}
-                //    -${new Date().getDate()
-                // }&sortBy=publishedAt&apiKey=${API_4}`);
-                let response = await fetch(`https://newsapi.org/v2/everything?q=${query}&from=2024-03-02&sortBy=publishedAt&apiKey=47b293b38f9d48f0949912210da79925`)
+                let response = await fetch(
+                    `https://newsapi.org/v2/everything?
+                    q=${query}&from=
+                    ${new Date().getFullYear()}-
+                    ${new Date().getMonth() + 1}
+                   -${new Date().getDate()
+                }&sortBy=publishedAt&apiKey=${API_5}`);
+                // let response = await fetch(`https://newsapi.org/v2/everything?q=${query}&from=2024-03-03&sortBy=publishedAt&apiKey=${API_5}`)
                 // Parsing response data to JSON format
                 let data = await response.json();
     
@@ -65,7 +66,7 @@ function App(){
     return (
         
             
-                loginStatus ?  <Form setLoginStatus={setLoginStatus} /> : 
+                !loginStatus ?  <Form setLoginStatus={setLoginStatus} /> : 
 
                 <>
                         <header>
