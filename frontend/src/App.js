@@ -8,6 +8,7 @@ import Article from "./Components/Article";
 
 // Add Your API Keys's Here
 // Go to newapi.org for api key
+// The API may not work when you deploy. Only for development purpose
 var API_1 = "85af9400c56446819326f5fdfc6afc0e";
 var API_2 = "1fabb175ac6f4d81aec50289cd58e946";
 var API_3 = "47b293b38f9d48f0949912210da79925";
