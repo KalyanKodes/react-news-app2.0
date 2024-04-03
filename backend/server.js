@@ -7,7 +7,10 @@ const PORT = 3001;
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect('mongodb+srv://rajkalyandev:root@test.rhtgkqj.mongodb.net/')
+// Create a database in MongodbAtlas or You can use your localhost Mongodb Compass Software and paste the connection string here
+let mongoDbLink = "mongodb+srv://rajkalyandev:root@test.rhtgkqj.mongodb.net/"
+
+mongoose.connect(mongoDbLink)
   .then(() => {
     console.log('Connected to MongoDB');
     console.log('Host:', mongoose.connection.host);

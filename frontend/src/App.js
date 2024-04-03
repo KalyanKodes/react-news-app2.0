@@ -2,6 +2,12 @@ import React from "react";
 import Form from "./Components/Form";
 import Article from "./Components/Article";
 
+
+
+
+
+// Add Your API Keys's Here
+// Go to newapi.org for api key
 var API_1 = "85af9400c56446819326f5fdfc6afc0e";
 var API_2 = "1fabb175ac6f4d81aec50289cd58e946";
 var API_3 = "47b293b38f9d48f0949912210da79925";
@@ -29,6 +35,7 @@ function App(){
                     ${new Date().getFullYear()}-
                     ${new Date().getMonth() + 1}
                    -${new Date().getDate()
+                    // Replace Your API key 
                 }&sortBy=publishedAt&apiKey=${API_5}`);
                 // let response = await fetch(`https://newsapi.org/v2/everything?q=${query}&from=2024-03-03&sortBy=publishedAt&apiKey=${API_5}`)
                 // Parsing response data to JSON format
